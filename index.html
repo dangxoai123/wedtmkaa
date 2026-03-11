@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TMKAA - Dịch vụ thiết kế website chuyên nghiệp & tự động hóa marketing. Giải pháp web toàn diện cho doanh nghiệp.">
+  <meta name="keywords" content="thiết kế website, làm web chuyên nghiệp, web doanh nghiệp, automation marketing, SEO website, TMKAA">
+  <meta name="robots" content="index, follow">
+  <!-- Open Graph -->
+  <meta property="og:title" content="TMKAA | Thiết Kế Website & Automation Chuyên Nghiệp">
+  <meta property="og:description" content="TMKAA - Dịch vụ thiết kế website chuyên nghiệp & tự động hóa marketing. Giải pháp web toàn diện cho doanh nghiệp.">
+  <meta property="og:image" content="images/og-tmkaa-thiet-ke-website.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="TMKAA - Dịch vụ thiết kế website chuyên nghiệp">
+  <meta property="og:url" content="https://tmkaa.io.vn">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="vi_VN">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TMKAA | Thiết Kế Website & Automation Chuyên Nghiệp">
+  <meta name="twitter:description" content="TMKAA - Dịch vụ thiết kế website chuyên nghiệp & tự động hóa marketing.">
+  <meta name="twitter:image" content="images/og-tmkaa-thiet-ke-website.png">
+  <meta name="twitter:image:alt" content="TMKAA - Dịch vụ thiết kế website chuyên nghiệp">
+  <title>TMKAA | Thiết Kế Website & Automation Chuyên Nghiệp</title>
+  <link rel="canonical" href="https://tmkaa.io.vn">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- POPUP -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-box">
+      <div class="popup-icon">🛡️</div>
+      <h2>TMKAA THÔNG BÁO</h2>
+      <div class="popup-subtitle">Cam kết & Chính sách sử dụng dịch vụ</div>
+      <p>Chúng tôi làm việc và tạo ra sản phẩm nhằm mục đích phục vụ khách hàng và <strong>nói không với vi phạm liên
+          quan tới pháp luật</strong>.</p>
+      <div class="popup-warning">
+        ⚠️ Mọi hành vi quấy phá, DDoS, sử dụng các tài khoản giả mạo đi lừa đảo gây ảnh hưởng tới người dùng khác —
+        chúng tôi sẽ <strong>truy cứu dựa trên thông tin truy cập</strong>.
+      </div>
+      <p class="popup-thanks">🙏 Cảm ơn đã sử dụng dịch vụ của chúng tôi!</p>
+      <button class="popup-btn" onclick="closePopup()">Tôi Đã Hiểu</button>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo-tmkaa.png" alt="TMKAA - Thiết kế website chuyên nghiệp" class="nav-logo-img" height="38" loading="eager">
+        <div class="nav-logo-text">
+          <span class="nav-brand">TMKAA</span>
+          <span class="nav-tagline">Thiết kế & Tạo web</span>
+        </div>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="active">Trang chủ</a>
+        <a href="gioi-thieu.html">Giới thiệu</a>
+        <a href="dich-vu.html">Dịch vụ</a>
+        <a href="lien-he.html" class="nav-cta"><i class="fas fa-headset"></i> Liên hệ</a>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="container hero-inner">
+      <div class="hero-content fade-up">
+        <div class="hero-badge">
+          <span class="dot"></span> Đang nhận đơn hàng mới
+        </div>
+        <h1>Thiết Kế <span class="text-gradient">&amp; Tạo Web</span><br>Chuyên Nghiệp<br>Cho Doanh Nghiệp</h1>
+        <p class="hero-desc">TMKAA mang đến giải pháp thiết kế & tạo web chuyên nghiệp, chuẩn SEO — cùng dịch vụ tự động hóa marketing giúp doanh nghiệp bạn tăng trưởng vượt bậc.</p>
+        <div class="hero-buttons">
+          <a href="lien-he.html" class="btn-white"><i class="fas fa-rocket"></i> Bắt Đầu Ngay</a>
+          <a href="dich-vu.html" class="btn-ghost"><i class="fas fa-eye"></i> Xem Dịch Vụ</a>
+        </div>
+        <div class="hero-stats-row">
+          <div class="hero-stat">
+            <div class="stat-num" data-target="50">0+</div>
+            <div class="stat-label">Dự án hoàn thành</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-num">99%</div>
+            <div class="stat-label">Khách hài lòng</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-num">24/7</div>
+            <div class="stat-label">Hỗ trợ kỹ thuật</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual fade-right">
+        <div class="hero-img-wrap">
+          <img
+            src="images/hero-thiet-ke-website.png"
+            alt="Thiết kế website chuyên nghiệp chuẩn SEO - TMKAA"
+            title="Dịch vụ thiết kế website chuyên nghiệp TMKAA"
+            width="600"
+            height="450"
+            loading="eager"
+            class="hero-img"
+          >
+          <div class="hero-float hero-float-1">
+            <div class="fl-icon">🚀</div>
+            <div>
+              <div class="fl-text">Deploy nhanh</div>
+              <div class="fl-sub">Chỉ trong 24h</div>
+            </div>
+          </div>
+          <div class="hero-float hero-float-2">
+            <div class="fl-icon">🔒</div>
+            <div>
+              <div class="fl-text">SSL miễn phí</div>
+              <div class="fl-sub">Bảo mật HTTPS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES HIGHLIGHT -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="section-tag"><i class="fas fa-code"></i> Dịch vụ nổi bật</div>
+        <h2>Giải Pháp <span class="text-gradient">Toàn Diện</span></h2>
+        <p>Chúng tôi cung cấp đa dạng giải pháp web và marketing phù hợp mọi nhu cầu</p>
+      </div>
+      <div class="services-grid">
+        <div class="srv-card fade-up">
+          <div class="srv-icon">🏢</div>
+          <h3>Web Doanh Nghiệp</h3>
+          <p>Website giới thiệu, landing page, bất động sản — thiết kế chuyên nghiệp, chuẩn SEO.</p>
+          <ul class="srv-features">
+            <li>Thiết kế độc quyền</li>
+            <li>Tối ưu SEO Google</li>
+            <li>Responsive mọi thiết bị</li>
+          </ul>
+        </div>
+        <div class="srv-card fade-up">
+          <div class="srv-icon">🛒</div>
+          <h3>Web Thương Mại</h3>
+          <p>Shop bán hàng, đặt phòng, căn hộ — tích hợp thanh toán tự động.</p>
+          <ul class="srv-features">
+            <li>Giỏ hàng & thanh toán</li>
+            <li>Tự động nạp tiền</li>
+            <li>Quản lý sản phẩm</li>
+          </ul>
+        </div>
+        <div class="srv-card fade-up">
+          <div class="srv-icon">🎓</div>
+          <h3>Web Học Tập</h3>
+          <p>Nền tảng bán khóa học, thi online với hệ thống chống gian lận tiên tiến.</p>
+          <ul class="srv-features">
+            <li>Thi trắc nghiệm online</li>
+            <li>Chống gian lận đa tầng</li>
+            <li>Bảo mật tuyệt đối</li>
+          </ul>
+        </div>
+        <div class="srv-card fade-up">
+          <div class="srv-icon">📱</div>
+          <h3>Auto Marketing MXH</h3>
+          <p>Tự động hóa Facebook, TikTok, Instagram — tăng tương tác hiệu quả.</p>
+          <ul class="srv-features">
+            <li>Auto tương tác</li>
+            <li>Tìm khách tiềm năng</li>
+            <li>Báo cáo chi tiết</li>
+          </ul>
+        </div>
+        <div class="srv-card fade-up">
+          <div class="srv-icon">🎯</div>
+          <h3>Tìm Khách Hàng</h3>
+          <p>Phần mềm tự động tìm kiếm và tiếp cận khách hàng tiềm năng trên Zalo, FB.</p>
+          <ul class="srv-features">
+            <li>Auto nhắn tin Zalo</li>
+            <li>Target chính xác</li>
+            <li>Tối ưu chi phí</li>
+          </ul>
+        </div>
+        <div class="srv-card fade-up">
+          <div class="srv-icon">⚡</div>
+          <h3>Custom Solution</h3>
+          <p>Giải pháp tùy chính theo yêu cầu riêng — từ web app đến phần mềm quản lý.</p>
+          <ul class="srv-features">
+            <li>Phân tích yêu cầu</li>
+            <li>Phát triển riêng</li>
+            <li>Bảo trì dài hạn</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-box fade-up">
+          <div class="stat-number">50+</div>
+          <div class="stat-text">Dự án hoàn thành</div>
+        </div>
+        <div class="stat-box fade-up">
+          <div class="stat-number">99%</div>
+          <div class="stat-text">Khách hàng hài lòng</div>
+        </div>
+        <div class="stat-box fade-up">
+          <div class="stat-number">24/7</div>
+          <div class="stat-text">Hỗ trợ kỹ thuật</div>
+        </div>
+        <div class="stat-box fade-up">
+          <div class="stat-number">1 năm</div>
+          <div class="stat-text">Miễn phí tên miền</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container fade-up">
+      <h2>Sẵn Sàng Bắt Đầu?</h2>
+      <p>Liên hệ ngay để được tư vấn miễn phí và nhận báo giá chi tiết cho dự án của bạn</p>
+      <a href="lien-he.html" class="btn-white"><i class="fas fa-headset"></i> Liên Hệ Ngay</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="f-brand">
+          <div class="footer-logo">
+            <img src="images/logo-tmkaa.png" alt="TMKAA" class="footer-logo-img" height="42" loading="lazy">
+          </div>
+          <p>Giải pháp thiết kế website và tự động hóa marketing chuyên nghiệp. Đồng hành cùng doanh nghiệp của bạn.</p>
+        </div>
+        <div class="f-col">
+          <h4>Dịch Vụ</h4>
+          <ul>
+            <li><a href="dich-vu.html">Web Doanh Nghiệp</a></li>
+            <li><a href="dich-vu.html">Web Thương Mại</a></li>
+            <li><a href="dich-vu.html">Web Học Tập</a></li>
+            <li><a href="dich-vu.html">Automation</a></li>
+          </ul>
+        </div>
+        <div class="f-col">
+          <h4>Trang</h4>
+          <ul>
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="gioi-thieu.html">Giới thiệu</a></li>
+            <li><a href="dich-vu.html">Dịch vụ & Bảng giá</a></li>
+            <li><a href="lien-he.html">Liên hệ</a></li>
+          </ul>
+        </div>
+        <div class="f-col">
+          <h4>Liên Hệ</h4>
+          <ul>
+            <li><a href="tel:0374147527">📞 0374 147 527</a></li>
+            <li><a href="https://t.me/dangka1906" target="_blank">✈️ @dangka1906</a></li>
+            <li><a href="https://tmkaa.io.vn" target="_blank">🌐 tmkaa.io.vn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 TMKAA. All rights reserved.</p>
+        <div class="footer-socials">
+          <a href="https://t.me/dangka1906" target="_blank"><i class="fab fa-telegram"></i></a>
+          <a href="tel:0374147527"><i class="fas fa-phone"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+  <script src="chat.js"></script>
+</body>
+
+</html>

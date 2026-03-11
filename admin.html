@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | TMKAA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --blue:#1a56db;--blue-light:#eff6ff;--green:#059669;--red:#ef4444;
+      --orange:#f59e0b;--bg:#f8fafc;--white:#fff;--border:#e5e7eb;
+      --text:#374151;--text-dark:#111827;--text-light:#6b7280;
+      --radius:10px;--shadow:0 1px 6px rgba(0,0,0,.07);
+    }
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+    /* LOGIN */
+    #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a56db15,#3b82f620)}
+    .login-card{background:white;padding:48px 40px;border-radius:20px;box-shadow:0 8px 40px rgba(0,0,0,.12);width:360px;text-align:center}
+    .login-logo{width:56px;height:56px;border-radius:14px;background:var(--blue);color:white;font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+    .login-card h2{font-size:1.4rem;font-weight:700;margin-bottom:6px}
+    .login-card p{color:var(--text-light);font-size:.85rem;margin-bottom:28px}
+    .login-card input{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.9rem;outline:none;margin-bottom:12px;transition:border-color .2s}
+    .login-card input:focus{border-color:var(--blue)}
+    .login-card button{width:100%;padding:13px;background:var(--blue);color:white;border:none;border-radius:var(--radius);font-size:.9rem;font-weight:600;cursor:pointer;transition:opacity .2s}
+    .login-card button:hover{opacity:.9}
+    #login-err{color:var(--red);font-size:.8rem;margin-top:8px;display:none}
+
+    /* APP */
+    #app{display:none}
+    .sidebar{width:240px;min-height:100vh;background:#1e293b;position:fixed;top:0;left:0;display:flex;flex-direction:column}
+    .sidebar-logo{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+    .sidebar-logo-icon{width:36px;height:36px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:16px}
+    .sidebar-logo span{color:white;font-weight:700;font-size:1rem}
+    .sidebar-logo small{color:#94a3b8;font-size:.7rem;display:block}
+    .sidebar-nav{padding:16px 0;flex:1}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:12px 20px;color:#94a3b8;cursor:pointer;transition:all .2s;font-size:.875rem;border-left:3px solid transparent}
+    .nav-item:hover,.nav-item.active{background:rgba(255,255,255,.06);color:white;border-left-color:var(--blue)}
+    .nav-item i{width:18px;text-align:center}
+    .nav-badge{background:var(--red);color:white;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:30px;margin-left:auto}
+    .sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08)}
+    .sidebar-user{display:flex;align-items:center;gap:10px;color:#94a3b8;font-size:.8rem}
+    .sidebar-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:white;font-size:14px}
+    .logout-btn{margin-left:auto;cursor:pointer;color:#ef4444;transition:color .2s}
+    .logout-btn:hover{color:#fca5a5}
+
+    .main{margin-left:240px;padding:32px}
+    .page{display:none}
+    .page.active{display:block}
+
+    /* STATS */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+    .stat-card{background:white;border-radius:var(--radius);padding:20px;border:1px solid var(--border);box-shadow:var(--shadow)}
+    .stat-card .stat-num{font-size:2rem;font-weight:800;color:var(--text-dark)}
+    .stat-card .stat-label{font-size:.8rem;color:var(--text-light);margin-top:4px}
+    .stat-card .stat-icon{font-size:1.4rem;float:right;margin-top:-40px;opacity:.6}
+
+    /* PAGE HEADER */
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .page-header h1{font-size:1.4rem;font-weight:700}
+    .filter-tabs{display:flex;gap:8px}
+    .filter-tab{padding:7px 16px;border-radius:30px;font-size:.8rem;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text-light);transition:all .2s}
+    .filter-tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+
+    /* TABLE */
+    .table-wrap{background:white;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;padding:12px 16px;font-size:.75rem;font-weight:600;color:var(--text-light);background:#f9fafb;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.04em}
+    td{padding:14px 16px;font-size:.85rem;border-bottom:1px solid #f3f4f6;vertical-align:top}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:#fafbff}
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:30px;font-size:.72rem;font-weight:600}
+    .badge-new{background:#fef3c7;color:#92400e}
+    .badge-processing{background:#dbeafe;color:#1e40af}
+    .badge-done{background:#d1fae5;color:#065f46}
+    .action-btn{padding:5px 12px;border-radius:6px;font-size:.75rem;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text);transition:all .2s;margin-right:4px}
+    .action-btn:hover{border-color:var(--blue);color:var(--blue)}
+    .action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+    .action-btn.success:hover{border-color:var(--green);color:var(--green)}
+
+    /* CHAT */
+    .chat-grid{display:grid;grid-template-columns:300px 1fr;gap:16px;height:calc(100vh - 160px)}
+    .chat-sessions{background:white;border-radius:var(--radius);border:1px solid var(--border);overflow-y:auto;box-shadow:var(--shadow)}
+    .chat-session-item{padding:14px 16px;border-bottom:1px solid #f3f4f6;cursor:pointer;transition:background .15s}
+    .chat-session-item:hover,.chat-session-item.active{background:var(--blue-light)}
+    .session-name{font-weight:600;font-size:.88rem;color:var(--text-dark)}
+    .session-last{font-size:.76rem;color:var(--text-light);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .session-meta{display:flex;justify-content:space-between;align-items:center}
+    .session-time{font-size:.7rem;color:var(--text-light)}
+    .session-unread{background:var(--red);color:white;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:30px}
+    .chat-main{background:white;border-radius:var(--radius);border:1px solid var(--border);display:flex;flex-direction:column;box-shadow:var(--shadow)}
+    .chat-main-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+    .chat-main-header h3{font-size:.95rem;font-weight:700}
+    .chat-main-header small{color:var(--text-light);font-size:.75rem}
+    .admin-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:10px;background:#fafbff}
+    .admin-msg{max-width:70%;padding:10px 14px;border-radius:12px;font-size:.85rem;line-height:1.5}
+    .admin-msg.visitor{background:#e0e7ff;color:#1e1b4b;align-self:flex-end;border-bottom-right-radius:3px}
+    .admin-msg.admin{background:var(--blue);color:white;align-self:flex-start;border-bottom-left-radius:3px}
+    .admin-msg-time{font-size:.68rem;opacity:.65;margin-top:4px;display:block}
+    .empty-chat{display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-light);font-size:.85rem;flex-direction:column;gap:12px}
+    .empty-chat i{font-size:2rem;opacity:.3}
+    .admin-input-area{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--border)}
+    .admin-input-area input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.85rem;outline:none;transition:border-color .2s}
+    .admin-input-area input:focus{border-color:var(--blue)}
+    .admin-send-btn{padding:10px 20px;background:var(--blue);color:white;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;font-size:.85rem;transition:opacity .2s}
+    .admin-send-btn:hover{opacity:.9}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:white;border-radius:16px;padding:32px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+    .modal h3{font-size:1.1rem;font-weight:700;margin-bottom:16px}
+    .modal-row{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+    .modal-row label{font-size:.75rem;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+    .modal-row span{font-size:.9rem;color:var(--text-dark)}
+    .modal-msg{background:var(--bg);padding:14px;border-radius:8px;font-size:.85rem;line-height:1.7;color:var(--text)}
+    .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+    .btn-close{padding:9px 20px;border-radius:8px;border:1.5px solid var(--border);background:white;cursor:pointer;font-size:.85rem}
+    .btn-done{padding:9px 20px;border-radius:8px;background:var(--green);color:white;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+    .btn-delete{padding:9px 20px;border-radius:8px;background:var(--red);color:white;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+
+    /* EMPTY */
+    .empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}
+    .empty-state i{font-size:2.5rem;opacity:.25;margin-bottom:12px;display:block}
+
+    @media(max-width:900px){
+      .sidebar{width:60px}.main{margin-left:60px}
+      .sidebar-logo span,.sidebar-logo small,.nav-item span,.sidebar-user span{display:none}
+      .nav-item{justify-content:center;padding:14px}.nav-item i{width:auto}
+      .stats-row{grid-template-columns:1fr 1fr}.chat-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">T</div>
+    <h2>TMKAA Admin</h2>
+    <p>Đăng nhập để quản lý yêu cầu & chat</p>
+    <input type="password" id="admin-pass" placeholder="Mật khẩu admin..." onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">Đăng Nhập</button>
+    <p id="login-err">❌ Mật khẩu không đúng!</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">T</div>
+      <div><span>TMKAA</span><small>Admin Panel</small></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="showPage('dashboard')"><i class="fas fa-chart-bar"></i> <span>Dashboard</span></div>
+      <div class="nav-item" onclick="showPage('requests')"><i class="fas fa-inbox"></i> <span>Yêu Cầu</span> <span class="nav-badge" id="badge-requests" style="display:none">0</span></div>
+      <div class="nav-item" onclick="showPage('chats')"><i class="fas fa-comments"></i> <span>Chat</span> <span class="nav-badge" id="badge-chats" style="display:none">0</span></div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar"><i class="fas fa-user"></i></div>
+        <span>Admin TMKAA</span>
+        <i class="fas fa-sign-out-alt logout-btn" onclick="logout()" title="Đăng xuất"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header"><h1>📊 Dashboard</h1></div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-icon">📥</div><div class="stat-num" id="stat-total">0</div><div class="stat-label">Tổng yêu cầu</div></div>
+        <div class="stat-card"><div class="stat-icon">🆕</div><div class="stat-num" id="stat-new">0</div><div class="stat-label">Yêu cầu mới</div></div>
+        <div class="stat-card"><div class="stat-icon">⚙️</div><div class="stat-num" id="stat-processing">0</div><div class="stat-label">Đang xử lý</div></div>
+        <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-num" id="stat-done">0</div><div class="stat-label">Đã xong</div></div>
+      </div>
+      <div class="stats-row" style="grid-template-columns:1fr 1fr">
+        <div class="stat-card"><div class="stat-icon">💬</div><div class="stat-num" id="stat-chats">0</div><div class="stat-label">Cuộc chat</div></div>
+        <div class="stat-card"><div class="stat-icon">🔔</div><div class="stat-num" id="stat-unread">0</div><div class="stat-label">Tin chưa đọc</div></div>
+      </div>
+    </div>
+
+    <!-- REQUESTS -->
+    <div class="page" id="page-requests">
+      <div class="page-header">
+        <h1>📥 Yêu Cầu Tư Vấn</h1>
+        <div class="filter-tabs">
+          <div class="filter-tab active" onclick="filterRequests('all',this)">Tất cả</div>
+          <div class="filter-tab" onclick="filterRequests('new',this)">Mới</div>
+          <div class="filter-tab" onclick="filterRequests('processing',this)">Đang xử lý</div>
+          <div class="filter-tab" onclick="filterRequests('done',this)">Đã xong</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Họ tên</th><th>SĐT</th><th>Dịch vụ</th><th>Thời gian</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+          <tbody id="requests-tbody"><tr><td colspan="6" class="empty-state"><i class="fas fa-inbox"></i> Đang tải...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CHATS -->
+    <div class="page" id="page-chats">
+      <div class="page-header"><h1>💬 Chat Trực Tiếp</h1></div>
+      <div class="chat-grid">
+        <div class="chat-sessions" id="chat-sessions-list">
+          <div class="empty-state"><i class="fas fa-comments"></i> Chưa có cuộc chat</div>
+        </div>
+        <div class="chat-main">
+          <div class="admin-messages" id="admin-messages">
+            <div class="empty-chat"><i class="fas fa-comments"></i> Chọn cuộc chat để xem tin nhắn</div>
+          </div>
+          <div class="admin-input-area">
+            <input type="text" id="admin-reply-input" placeholder="Nhập tin nhắn trả lời..." onkeydown="if(event.key==='Enter')sendAdminReply()">
+            <button class="admin-send-btn" onclick="sendAdminReply()"><i class="fas fa-paper-plane"></i> Gửi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CHI TIET -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal">
+    <h3>📋 Chi Tiết Yêu Cầu</h3>
+    <div class="modal-row"><label>Họ tên</label><span id="m-name"></span></div>
+    <div class="modal-row"><label>Số điện thoại</label><span id="m-phone"></span></div>
+    <div class="modal-row"><label>Dịch vụ</label><span id="m-service"></span></div>
+    <div class="modal-row"><label>Mô tả yêu cầu</label><div class="modal-msg" id="m-msg"></div></div>
+    <div class="modal-row"><label>Thời gian</label><span id="m-time"></span></div>
+    <div class="modal-footer">
+      <button class="btn-delete" onclick="deleteRequest(currentModal)">Xóa</button>
+      <button class="btn-close" onclick="closeModal()">Đóng</button>
+      <button class="btn-done" onclick="markDone(currentModal)">✓ Đã xong</button>
+    </div>
+  </div>
+</div>
+
+<!-- FIREBASE CDN -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+const ADMIN_PASS = 'thanhdang1906';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA7StRU1x8-qMCa3IH7XMEgl9X8Wq95mF4",
+  authDomain: "wedtmka.firebaseapp.com",
+  projectId: "wedtmka",
+  storageBucket: "wedtmka.firebasestorage.app",
+  messagingSenderId: "721319516784",
+  appId: "1:721319516784:web:bbf75c976ba57efa35f2b5"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let allRequests = [];
+let currentFilter = 'all';
+let currentModal = null;
+let currentChatSession = null;
+let chatUnsubscribe = null;
+
+// ===== LOGIN =====
+if(sessionStorage.getItem('tmkaa_admin')) showApp();
+function doLogin(){
+  const pass = document.getElementById('admin-pass').value;
+  if(pass === ADMIN_PASS){ sessionStorage.setItem('tmkaa_admin','1'); showApp(); }
+  else { document.getElementById('login-err').style.display='block'; }
+}
+function showApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  loadRequests(); loadChats(); loadStats();
+}
+function logout(){
+  sessionStorage.removeItem('tmkaa_admin');
+  location.reload();
+}
+
+// ===== NAVIGATION =====
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ===== REQUESTS =====
+function loadRequests(){
+  db.collection('requests').orderBy('createdAt','desc').onSnapshot(snap=>{
+    allRequests = [];
+    snap.forEach(doc=>allRequests.push({id:doc.id,...doc.data()}));
+    renderRequests();
+    updateStats();
+  });
+}
+
+function renderRequests(){
+  const tbody = document.getElementById('requests-tbody');
+  const filtered = currentFilter==='all' ? allRequests : allRequests.filter(r=>r.status===currentFilter);
+  if(!filtered.length){ tbody.innerHTML='<tr><td colspan="6"><div class="empty-state"><i class="fas fa-inbox"></i><br>Chưa có yêu cầu nào</div></td></tr>'; return; }
+  tbody.innerHTML = filtered.map(r=>{
+    const time = r.createdAt ? new Date(r.createdAt.seconds*1000).toLocaleString('vi-VN') : '—';
+    const status = r.status||'new';
+    const badgeMap = {new:'badge-new',processing:'badge-processing',done:'badge-done'};
+    const labelMap = {new:'Mới',processing:'Đang xử lý',done:'Đã xong'};
+    return `<tr>
+      <td><strong>${r.name||'—'}</strong></td>
+      <td><a href="tel:${r.phone}" style="color:var(--blue)">${r.phone||'—'}</a></td>
+      <td>${r.service||'—'}</td>
+      <td style="font-size:.78rem;color:var(--text-light)">${time}</td>
+      <td><span class="badge ${badgeMap[status]}">${labelMap[status]||status}</span></td>
+      <td>
+        <button class="action-btn" onclick="viewRequest('${r.id}')"><i class="fas fa-eye"></i></button>
+        <button class="action-btn success" onclick="setStatus('${r.id}','processing')"><i class="fas fa-spinner"></i></button>
+        <button class="action-btn success" onclick="setStatus('${r.id}','done')"><i class="fas fa-check"></i></button>
+        <button class="action-btn danger" onclick="deleteRequest('${r.id}')"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterRequests(f,el){
+  currentFilter=f;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderRequests();
+}
+
+function setStatus(id,status){
+  db.collection('requests').doc(id).update({status});
+}
+
+function viewRequest(id){
+  const r = allRequests.find(x=>x.id===id);
+  if(!r) return;
+  currentModal = id;
+  document.getElementById('m-name').textContent = r.name||'—';
+  document.getElementById('m-phone').textContent = r.phone||'—';
+  document.getElementById('m-service').textContent = r.service||'—';
+  document.getElementById('m-msg').textContent = r.message||'Không có';
+  document.getElementById('m-time').textContent = r.createdAt ? new Date(r.createdAt.seconds*1000).toLocaleString('vi-VN') : '—';
+  document.getElementById('detail-modal').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('detail-modal').classList.remove('open'); }
+
+function markDone(id){
+  if(id) db.collection('requests').doc(id).update({status:'done'});
+  closeModal();
+}
+
+function deleteRequest(id){
+  if(id && confirm('Xóa yêu cầu này?')){ db.collection('requests').doc(id).delete(); closeModal(); }
+}
+
+// ===== CHATS =====
+function loadChats(){
+  db.collection('chats').orderBy('lastMessageAt','desc').onSnapshot(snap=>{
+    const list = document.getElementById('chat-sessions-list');
+    let unread = 0;
+    if(!snap.size){ list.innerHTML='<div class="empty-state"><i class="fas fa-comments"></i><br>Chưa có cuộc chat</div>'; return; }
+    list.innerHTML = '';
+    snap.forEach(doc=>{
+      const d = doc.data();
+      const u = d.unread||0;
+      if(u>0) unread++;
+      const time = d.lastMessageAt ? new Date(d.lastMessageAt.seconds*1000).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}) : '';
+      const div = document.createElement('div');
+      div.className = 'chat-session-item' + (currentChatSession===doc.id?' active':'');
+      div.onclick = ()=>openChat(doc.id, d.visitorName||'Khách');
+      div.innerHTML = `
+        <div class="session-meta">
+          <div class="session-name">👤 ${d.visitorName||'Khách'}</div>
+          ${u>0?`<span class="session-unread">${u}</span>`:''}
+        </div>
+        <div class="session-last">${d.lastMessage||'Bắt đầu chat'}</div>
+        <div class="session-time">${time}</div>
+      `;
+      list.appendChild(div);
+    });
+    const badge = document.getElementById('badge-chats');
+    badge.style.display = unread>0?'inline':'none';
+    badge.textContent = unread;
+    document.getElementById('stat-unread').textContent = unread;
+  });
+}
+
+function openChat(sessionId, name){
+  currentChatSession = sessionId;
+  if(chatUnsubscribe) chatUnsubscribe();
+  const msgs = document.getElementById('admin-messages');
+  msgs.innerHTML = '';
+  db.collection('chats').doc(sessionId).update({unread:0});
+  chatUnsubscribe = db.collection('chats').doc(sessionId).collection('messages').orderBy('createdAt').onSnapshot(snap=>{
+    msgs.innerHTML = '';
+    snap.forEach(doc=>{
+      const d = doc.data();
+      const div = document.createElement('div');
+      div.className = 'admin-msg ' + (d.sender==='visitor'?'visitor':'admin');
+      const time = d.createdAt ? new Date(d.createdAt.seconds*1000).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}) : '';
+      div.innerHTML = d.text + `<span class="admin-msg-time">${time}</span>`;
+      msgs.appendChild(div);
+    });
+    msgs.scrollTop = msgs.scrollHeight;
+  });
+  document.querySelectorAll('.chat-session-item').forEach(i=>i.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+function sendAdminReply(){
+  if(!currentChatSession) return;
+  const input = document.getElementById('admin-reply-input');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  db.collection('chats').doc(currentChatSession).collection('messages').add({
+    text, sender:'admin', createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  db.collection('chats').doc(currentChatSession).update({
+    lastMessage:'[Admin] '+text,
+    lastMessageAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+// ===== STATS =====
+function updateStats(){
+  document.getElementById('stat-total').textContent = allRequests.length;
+  document.getElementById('stat-new').textContent = allRequests.filter(r=>!r.status||r.status==='new').length;
+  document.getElementById('stat-processing').textContent = allRequests.filter(r=>r.status==='processing').length;
+  document.getElementById('stat-done').textContent = allRequests.filter(r=>r.status==='done').length;
+  const newCount = allRequests.filter(r=>!r.status||r.status==='new').length;
+  const badge = document.getElementById('badge-requests');
+  badge.style.display = newCount>0?'inline':'none';
+  badge.textContent = newCount;
+}
+function loadStats(){
+  db.collection('chats').get().then(s=>{ document.getElementById('stat-chats').textContent=s.size; });
+}
+</script>
+</body>
+</html>
