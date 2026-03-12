@@ -156,6 +156,7 @@
     <nav class="sidebar-nav">
       <div class="nav-item active" onclick="showPage('dashboard')"><i class="fas fa-chart-bar"></i> <span>Dashboard</span></div>
       <div class="nav-item" onclick="showPage('requests')"><i class="fas fa-inbox"></i> <span>Yêu Cầu</span> <span class="nav-badge" id="badge-requests" style="display:none">0</span></div>
+      <div class="nav-item" onclick="showPage('ctv')"><i class="fas fa-user-tie"></i> <span>Đơn CTV</span> <span class="nav-badge" id="badge-ctv" style="display:none">0</span></div>
       <div class="nav-item" onclick="showPage('chats')"><i class="fas fa-comments"></i> <span>Chat</span> <span class="nav-badge" id="badge-chats" style="display:none">0</span></div>
     </nav>
     <div class="sidebar-footer">
@@ -198,6 +199,24 @@
         <table>
           <thead><tr><th>Họ tên</th><th>SĐT</th><th>Dịch vụ</th><th>Thời gian</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
           <tbody id="requests-tbody"><tr><td colspan="6" class="empty-state"><i class="fas fa-inbox"></i> Đang tải...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CTV PAGE -->
+    <div class="page" id="page-ctv">
+      <div class="page-header">
+        <h1>🤝 Đơn Ứng Tuyển CTV</h1>
+        <div class="filter-tabs">
+          <div class="filter-tab active" onclick="filterCTV('all',this)">Tất cả</div>
+          <div class="filter-tab" onclick="filterCTV('new',this)">Mới</div>
+          <div class="filter-tab" onclick="filterCTV('done',this)">Đã liên hệ</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Họ tên</th><th>SĐT / Zalo</th><th>Kinh nghiệm</th><th>Thời gian</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+          <tbody id="ctv-tbody"><tr><td colspan="6" class="empty-state"><i class="fas fa-user-tie"></i> Đang tải...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -273,7 +292,7 @@ function doLogin(){
 function showApp(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
-  loadRequests(); loadChats(); loadStats();
+  loadRequests(); loadChats(); loadStats(); loadCTV();
 }
 function logout(){
   sessionStorage.removeItem('tmkaa_admin');
@@ -424,6 +443,74 @@ function sendAdminReply(){
     lastMessage:'[Admin] '+text,
     lastMessageAt: firebase.firestore.FieldValue.serverTimestamp()
   });
+}
+
+// ===== CTV APPLICATIONS =====
+let allCTV = [];
+let currentCTVFilter = 'all';
+
+function loadCTV(){
+  db.collection('ctv_applications').orderBy('createdAt','desc').onSnapshot(snap=>{
+    allCTV = [];
+    snap.forEach(doc=>allCTV.push({id:doc.id,...doc.data()}));
+    renderCTV();
+    const newCTV = allCTV.filter(r=>!r.status||r.status==='new').length;
+    const badge = document.getElementById('badge-ctv');
+    badge.style.display = newCTV>0?'inline':'none';
+    badge.textContent = newCTV;
+  });
+}
+
+function renderCTV(){
+  const tbody = document.getElementById('ctv-tbody');
+  const filtered = currentCTVFilter==='all' ? allCTV : allCTV.filter(r=>r.status===currentCTVFilter);
+  if(!filtered.length){ tbody.innerHTML='<tr><td colspan="6"><div class="empty-state"><i class="fas fa-user-tie"></i><br>Chua co don nao</div></td></tr>'; return; }
+  tbody.innerHTML = filtered.map(r=>{
+    const time = r.createdAt ? new Date(r.createdAt.seconds*1000).toLocaleString('vi-VN') : '—';
+    const status = r.status||'new';
+    const badgeMap = {new:'badge-new',done:'badge-done'};
+    const labelMap = {new:'Mới',done:'Đã liên hệ'};
+    const exp = r.experience ? (r.experience.length>60?r.experience.slice(0,60)+'...':r.experience) : '—';
+    return `<tr>
+      <td><strong>${r.name||'—'}</strong></td>
+      <td><a href="tel:${r.phone}" style="color:var(--blue)">${r.phone||'—'}</a></td>
+      <td style="max-width:200px;color:var(--text-light);font-size:.8rem">${exp}</td>
+      <td style="font-size:.78rem;color:var(--text-light)">${time}</td>
+      <td><span class="badge ${badgeMap[status]||'badge-new'}">${labelMap[status]||status}</span></td>
+      <td>
+        <button class="action-btn" onclick="viewCTV('${r.id}')"><i class="fas fa-eye"></i></button>
+        <button class="action-btn success" onclick="setCTVStatus('${r.id}','done')"><i class="fas fa-check"></i></button>
+        <button class="action-btn danger" onclick="deleteCTV('${r.id}')"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterCTV(f,el){
+  currentCTVFilter=f;
+  document.querySelectorAll('#page-ctv .filter-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderCTV();
+}
+
+function setCTVStatus(id,status){
+  db.collection('ctv_applications').doc(id).update({status});
+}
+
+function deleteCTV(id){
+  if(confirm('Xóa đơn này?')) db.collection('ctv_applications').doc(id).delete();
+}
+
+function viewCTV(id){
+  const r = allCTV.find(x=>x.id===id);
+  if(!r) return;
+  currentModal = id;
+  document.getElementById('m-name').textContent = r.name||'—';
+  document.getElementById('m-phone').textContent = r.phone||'—';
+  document.getElementById('m-service').textContent = 'Đơn CTV Marketing';
+  document.getElementById('m-msg').textContent = r.experience||'Không có';
+  document.getElementById('m-time').textContent = r.createdAt ? new Date(r.createdAt.seconds*1000).toLocaleString('vi-VN') : '—';
+  document.getElementById('detail-modal').classList.add('open');
 }
 
 // ===== STATS =====
